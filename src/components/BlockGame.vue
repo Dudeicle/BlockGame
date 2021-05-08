@@ -151,7 +151,13 @@
 							row3box3: 'x=400,y=400'
 						}
 					]
-				]
+				],
+				numXgrid: 3,
+				numYgrid: 3,
+				zoomLevel: 200,
+				startingPoint: 0,
+				gridCheckState: false,
+
 			}
 		},
 		// before Vue renders
@@ -165,12 +171,7 @@
 		},
 		// after Vue renders
 		async mounted() {
-			// this.fillGrid(this.grid5x5Loop)
-
-			this.draw()
-
 			this.context = this.$refs.game.getContext("2d");
-
 			await this.socket.on("position", data => {
 				// const wideness = this.$refs.game.width
 				// const tallness = this.$refs.game.height
@@ -184,33 +185,28 @@
 				console.log(this.position.x, "X")
 				console.log(this.position.y, "Y")
 
-				//BOTTOM RIGHT CORNER
-				if(this.position.x === 400 && this.position.y === 400){
-					let green = this.$refs.game.getContext('2d');
-					green.fillStyle = 'green';
-					green.fillRect(400, 400, 200, 200)
-				}
+				// //BOTTOM RIGHT CORNER
+				// if(this.position.x === 400 && this.position.y === 400){
+				// 	let green = this.$refs.game.getContext('2d');
+				// 	green.fillStyle = 'green';
+				// 	green.fillRect(400, 400, 200, 200)
+				// }
 
-				//TOP RIGHT CORNER
-				if(this.position.x === 400 && this.position.y === 0){
-					let yellow = this.$refs.game.getContext('2d');
-					yellow.fillStyle = 'yellow';
-					yellow.fillRect(0, 0, 400, 0)
-				}
+				// //TOP RIGHT CORNER
+				// if(this.position.x === 400 && this.position.y === 0){
+				// 	let yellow = this.$refs.game.getContext('2d');
+				// 	yellow.fillStyle = 'yellow';
+				// 	yellow.fillRect(0, 0, 400, 0)
+				// }
 
 			});
+
+			this.drawGrid()
 		},
 		computed: {
 
 		},
 		methods: {
-			draw() {
-				let c = document.getElementById("myCanvas");
-				let ctx = c.getContext("2d");
-				ctx.moveTo(400, 400);
-				ctx.lineTo(400, 0);
-				ctx.stroke();
-			},
 			wasdMovement(e) {
 				let cmd = String.fromCharCode(e.keyCode).toLowerCase();
 				console.log(cmd, "command")
@@ -251,16 +247,60 @@
 			moveDown() {
 				this.socket.emit("move", "down")
 			},
+			//primary draw routine that creates the grid on the lowest
+			//drawing level, draws each grid line and the boundary
+			//rectangle
+			drawGrid() {
+				let contextRef = this.$refs.game.getContext("2d")
 
+				//draw grid layer first
+				let numGridsX = 3
+				let numGridsY = 3
+				let gridSize = 200
+				let { startx, starty } = 0
 
+				let gridWidth = numGridsX * gridSize
+				let gridHeight = numGridsY * gridSize
 
+				//color and thickness of gridlines
+				contextRef.current.strokeStyle = "#D3D3D388"
+				contextRef.current.lineWidth = 3
 
+				//reset canvas
+				contextRef.current.clearRect(0, 0, 600, 600)
+				contextRef.current.beginPath()
+				let x, y, i
+
+				if (this.gridCheckState) {
+				//Drawing vertical lines
+				for (i = 1; i <= numGridsX; i++) {
+					x = i * gridSize + startx
+					contextRef.current.moveTo(x, starty)
+					contextRef.current.lineTo(x, gridHeight + starty)
+					contextRef.current.stroke()
+				}
+
+				//Drawing Horizontal lines
+				for (i = 1; i <= numGridsY; i++) {
+					y = i * gridSize + starty
+					contextRef.current.moveTo(startx, y)
+					contextRef.current.lineTo(gridWidth + startx, y)
+					contextRef.current.stroke()
+				}
+				}
+				//Draw grid border
+				contextRef.current.strokeRect(startx, starty, gridWidth, gridHeight)
+
+				contextRef.current.closePath()
+			},
 			// fillGrid(grid) {
 			// 	let loopTimer = grid.length
 			// 	console.log(loopTimer)
 			// }
 		}
 	}
+
+
 </script>
 
 <style scoped>
@@ -293,3 +333,5 @@
 }
 
 </style>
+
+

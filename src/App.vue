@@ -1,16 +1,20 @@
 <template>
 	<div id="app">
-		<BlockGame />
+		<!-- <BlockGame /> -->
+		<BlockGameNoCanvas />
 	</div>
+	
 </template>
 
 <script>
-import BlockGame from './components/BlockGame.vue'
+// import BlockGame from './components/BlockGame.vue'
+import BlockGameNoCanvas from './components/BlockGameNoCanvas.vue'
 
 export default {
 	name: 'App',
 	components: {
-		BlockGame
+		// BlockGame,
+		BlockGameNoCanvas
 	}
 }
 </script>
