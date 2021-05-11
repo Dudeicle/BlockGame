@@ -1,8 +1,8 @@
 <template>
 	<v-container fluid style="width:600px;height:600px;">
 			<v-row>
-				<v-col v-for="item in gameBoard3x3" :key="item.id" cols="4"  style="border:2px solid yellow;width:200px;height:200px;padding:1%;">
-					Greeting: {{ item.hello }}
+				<v-col v-for="item in gameBoard3x3" :key="item.id" cols="4"  style="border:1px ridge crimson;width:200px;height:200px;padding:1%;background-color:black;">
+					<!-- Greeting: {{ item.hello }}
 					<br/>
 					Row: {{ item.row }}
 					<br/>
@@ -11,6 +11,8 @@
 					Player? {{ item.residentPlayer }}
 					<br />
 					NPC? {{ item.residentNpc }}
+					<p v-if="item.residentPlayer === true"><span>THE PLAYER IS HERE</span></p> -->
+					<img height="185px" style="" src="../assets/forest.png" alt="">
 				</v-col>
 			</v-row>
 
@@ -73,80 +75,130 @@
 		},
 		data() {
 			return {
+				// GAME BOARD RELATED STUFF
+				// GAME BOARD RELATED STUFF
+				// GAME BOARD RELATED STUFF
                 gameBoard3x3: [
                     {
-                        id: 1,
+                        // BOARD INFO
+						id: 0,
                         row: 1,
                         col: 1,
-                        hello: "Hello1",
-						residentPlayer: false,
-						residentNpc: false
+						terrain: null,
+						// NPC BOARD INFO
+						npcType: null,
+						residentNpc: false,
+						// PLAYER BOARD INFO
+                        residentPlayer: false,
                     },
                     {
-                        id: 2,
+                        // BOARD INFO
+						id: 1,
                         row: 1,
                         col: 2,
-                        hello: "Hello2",
-						residentPlayer: false,
-						residentNpc: false
+						terrain: null,
+						// NPC BOARD INFO
+						npcType: null,
+						residentNpc: false,
+						// PLAYER BOARD INFO
+                        residentPlayer: false,
                     },
                     {
-                        id: 3,
+                        // BOARD INFO
+						id: 2,
                         row: 1,
                         col: 3,
-                        hello: "Hello3",
-						residentPlayer: false,
-						residentNpc: false
+						terrain: null,
+						// NPC BOARD INFO
+						npcType: null,
+						residentNpc: false,
+						// PLAYER BOARD INFO
+                        residentPlayer: false,
                     },
                     {
-                        id: 4,
+                        // BOARD INFO
+						id: 3,
                         row: 2,
                         col: 1,
-                        hello: "Hello1",
-						residentPlayer: false,
-						residentNpc: false
+						terrain: null,
+						// NPC BOARD INFO
+						npcType: null,
+						residentNpc: false,
+						// PLAYER BOARD INFO
+                        residentPlayer: false,
                     },
                     {
-                        id: 5,
+                        // BOARD INFO
+						id: 4,
                         row: 2,
                         col: 2,
-                        hello: "Hello2",
-						residentPlayer: false,
-						residentNpc: false
+						terrain: null,
+						// NPC BOARD INFO
+						npcType: null,
+						residentNpc: false,
+						// PLAYER BOARD INFO
+                        residentPlayer: false,
                     },
                     {
-                        id: 6,
+                        // BOARD INFO
+						id: 5,
                         row: 2,
                         col: 3,
-                        hello: "Hello3",
-						residentPlayer: false,
-						residentNpc: false
+						terrain: null,
+						// NPC BOARD INFO
+						npcType: null,
+						residentNpc: false,
+						// PLAYER BOARD INFO
+                        residentPlayer: false,
                     },
                     {
-                        id: 7,
+                        // BOARD INFO
+						id: 6,
                         row: 3,
                         col: 1,
-                        hello: "Hello1",
-						residentPlayer: false,
-						residentNpc: false
+						terrain: null,
+						// NPC BOARD INFO
+						npcType: null,
+						residentNpc: false,
+						// PLAYER BOARD INFO
+                        residentPlayer: false,
                     },
                     {
-                        id: 8,
+                        // BOARD INFO
+						id: 7,
                         row: 3,
                         col: 2,
-                        hello: "Hello2",
-						residentPlayer: false,
-						residentNpc: false
+						terrain: null,
+						// NPC BOARD INFO
+						npcType: null,
+						residentNpc: false,
+						// PLAYER BOARD INFO
+                        residentPlayer: false,
                     },
                     {
-                        id: 9,
+                        // BOARD INFO
+						id: 8,
                         row: 3,
                         col: 3,
-                        hello: "Hello3",
-						residentPlayer: false,
-						residentNpc: false
+						terrain: null,
+						// NPC BOARD INFO
+						npcType: null,
+						residentNpc: false,
+						// PLAYER BOARD INFO
+                        residentPlayer: false,
                     },
                 ],
+				terrainTypes: [
+					"plains",
+					"mountains",
+					"forest",
+					"ocean"
+				],
+
+
+				// PLAYERS RELATED STUFF
+				// PLAYERS RELATED STUFF
+				// PLAYERS RELATED STUFF
 				playerPlaced: false,
 				player: {
 					position: {
@@ -159,6 +211,11 @@
 					ap: 1,
 					ar: 1
 				},
+
+
+				// NPC RELATED STUFF
+				// NPC RELATED STUFF
+				// NPC RELATED STUFF
 				npcOnMap: [],
 				npcTypes: [
 					{
@@ -185,8 +242,7 @@
 						ar: 3,
 						xpReward: 10
 					},
-				]
-
+				],
 			}
 		},
 		// before Vue renders
@@ -209,8 +265,9 @@
 			// GAME START
 			gameStart() {
 				
-				for(let i = 1; i < this.gameBoard3x3.length+1; i++) {
+				for(let i = 0; i < this.gameBoard3x3.length; i++) {
 					setTimeout(() => {
+					console.log(i, 'This is i')
 
 					let randomSquare = Math.floor(Math.random() * 9) + 1;
 					// console.log('Square Choosen', randomSquare)
@@ -218,29 +275,30 @@
 					// let randomNpc = Math.floor(Math.random() * 3) + 1;
 					// console.log('Npc Choosen', randomNpc)
 
+					// PLACING THE PLAYER
 					if(this.playerPlaced === false){
-						// console.log('hello')
-						// console.log(this.gameBoard3x3[i - 1])
-						// console.log(this.gameBoard3x3[i - 1].residentPlayer)
+						// console.log("Player Square", randomSquare)
+						// console.log("Player i number", i)
 
-						console.log("Player Square", randomSquare)
-						console.log("Player i number", i)
-
+						// GAME BOARD SETTINGS BEING SET
 						this.gameBoard3x3[randomSquare].residentPlayer = true
-
+						
+						// PLAYER SETTINGS BEING SET
+						this.player.position.row = this.gameBoard3x3[randomSquare].row
+						this.player.position.col = this.gameBoard3x3[randomSquare].col
 						this.playerPlaced = true
+						console.log("THIS IS PLAYER POSITION", this.player.position)
 					}
-					// console.log(i)
 
-					// let randomSquare = Math.floor(Math.random() * 10);
-					// console.log('Square Choosen', randomSquare)
+					// PLACING THE COMPUTER CONTROLLED CHARACTERS
+					if(this.playerPlaced === true){
 
-					// let randomSquare = Math.floor(Math.random() * 10);
-					// console.log('Square Choosen', randomSquare)
+						// GAME BOARD SETTINGS BEING SET
+						// this.gameBoard3x3[randomSquare].residentNpc = true
 
+						// NPC SETTINGS BEING SET
 
-
-
+					}
 
 
 					}, 1000)
@@ -252,50 +310,45 @@
 
 
 
-			wasdMovement(e) {
-				let cmd = String.fromCharCode(e.keyCode).toLowerCase();
-				console.log(cmd, "command")
-				console.log("W A S D Movement")
+			// wasdMovement(e) {
+			// 	let cmd = String.fromCharCode(e.keyCode).toLowerCase();
+			// 	console.log(cmd, "command")
+			// 	console.log("W A S D Movement")
 
-				if(cmd == "d"){
-					this.moveRight()
-				}
-				if(cmd == "a"){
-					this.moveLeft()
-				}
-				if(cmd == "w"){
-					this.moveUp()
-				}
-				if(cmd == "s"){
-					this.moveDown()
-				}
-			},
-			// GAME TIMER
-			// gameTimer() {
+			// 	if(cmd == "d"){
+			// 		this.moveRight()
+			// 	}
+			// 	if(cmd == "a"){
+			// 		this.moveLeft()
+			// 	}
+			// 	if(cmd == "w"){
+			// 		this.moveUp()
+			// 	}
+			// 	if(cmd == "s"){
+			// 		this.moveDown()
+			// 	}
 			// },
 
 			// CLICK MOVE
-			move(direction) {
-				this.socket.emit("move", direction)
-			},
+			// move(direction) {
+			// 	this.socket.emit("move", direction)
+			// },
 
 			// MOVE BY ARROW KEYS
-			moveRight() {
-				this.socket.emit("move", "right")
-			},
-			moveLeft() {
-				this.socket.emit("move", "left")
-			},
-			moveUp() {
-				this.socket.emit("move", "up")
-			},
-			moveDown() {
-				this.socket.emit("move", "down")
-			},
+			// moveRight() {
+			// 	this.socket.emit("move", "right")
+			// },
+			// moveLeft() {
+			// 	this.socket.emit("move", "left")
+			// },
+			// moveUp() {
+			// 	this.socket.emit("move", "up")
+			// },
+			// moveDown() {
+			// 	this.socket.emit("move", "down")
+			// },
 		}
 	}
-
-
 </script>
 
 <style scoped>
