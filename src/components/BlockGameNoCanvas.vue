@@ -1,7 +1,27 @@
 <template>
 	<v-container fluid style="width:600px;height:600px;">
 			<v-row>
-				<v-col v-for="item in gameBoard3x3" :key="item.id" cols="4"  style="border:1px ridge crimson;width:200px;height:200px;padding:1%;background-color:black;">
+				<v-col v-for="item in gameBoard3x3" :key="item.id" cols="4" style="background-image:'..assets/forest.png';border:1px ridge crimson;width:200px;height:200px;padding:1%;background-color:black;color:white">
+					<div v-if="item.terrain === 'plains'" class="plainsbg">
+						<p style="color:white;padding:5%">{{ item.terrain }}</p>
+
+					</div>
+
+					<div v-if="item.terrain === 'forest'" class="forestbg">
+						<p style="color:white;padding:5%">{{ item.terrain }}</p>
+
+					</div>
+
+					<div v-if="item.terrain === 'mountains'" class="mountainsbg">
+						<p style="color:white;padding:5%">{{ item.terrain }}</p>
+
+					</div>
+
+					<div v-if="item.terrain === 'ocean'" class="oceanbg">
+						<p style="color:white;padding:5%">{{ item.terrain }}</p>
+
+					</div>
+					
 					<!-- Greeting: {{ item.hello }}
 					<br/>
 					Row: {{ item.row }}
@@ -11,8 +31,16 @@
 					Player? {{ item.residentPlayer }}
 					<br />
 					NPC? {{ item.residentNpc }}
-					<p v-if="item.residentPlayer === true"><span>THE PLAYER IS HERE</span></p> -->
-					<img height="185px" style="" src="../assets/forest.png" alt="">
+					<p v-if="item.residentPlayer === true"><span style="font-size:2rem;">PLAYER</span></p>
+
+					<p v-if="item.residentNpc === true"><span style="font-size:2rem;">NPC</span></p>
+
+					<p v-if="item.residentNpc === true"><span style="font-size:2rem;">{{ item.npcType.name }}</span></p> -->
+
+					<!-- <img v-if="item.terrain === 'plains'" height="185px" style="" src="../assets/plains.png" alt="">
+					<img v-if="item.terrain === 'mountains'" height="185px" style="" src="../assets/mountains.png" alt="">
+					<img v-if="item.terrain === 'forest'" height="185px" style="" src="../assets/forest.png" alt="">
+					<img v-if="item.terrain === 'ocean'" height="185px" style="" src="../assets/ocean.png" alt=""> -->
 				</v-col>
 			</v-row>
 
@@ -75,6 +103,7 @@
 		},
 		data() {
 			return {
+				test: "..assets/forest.png",
 				// GAME BOARD RELATED STUFF
 				// GAME BOARD RELATED STUFF
 				// GAME BOARD RELATED STUFF
@@ -264,48 +293,48 @@
 		methods: {
 			// GAME START
 			gameStart() {
-				
+				// FIND A RANDOM SQUARE TO PLACE THE PLAYER INTO
+				let randomPlayerSquare = Math.floor(Math.random() * 9) + 1;
+
+
 				for(let i = 0; i < this.gameBoard3x3.length; i++) {
 					setTimeout(() => {
-					console.log(i, 'This is i')
+						// find a random terrain type, and apply it to the current gameBoard Square
+						let randomTerrainType = Math.floor(Math.random() * 4);
+						this.gameBoard3x3[i].terrain = this.terrainTypes[randomTerrainType]
+						console.log(this.gameBoard3x3[i].terrain, "what is the terrain")
 
-					let randomSquare = Math.floor(Math.random() * 9) + 1;
-					// console.log('Square Choosen', randomSquare)
+						if(this.playerPlaced === false){
+							// PLACING THE PLAYER
+							// PLACING THE PLAYER
+							// PLACING THE PLAYER
 
-					// let randomNpc = Math.floor(Math.random() * 3) + 1;
-					// console.log('Npc Choosen', randomNpc)
+							// set player flag to true, tell game this has been taken care of and move on with NPC placement
+							this.playerPlaced = true
 
-					// PLACING THE PLAYER
-					if(this.playerPlaced === false){
-						// console.log("Player Square", randomSquare)
-						// console.log("Player i number", i)
+							// set game board player setting to true, so that NO npcs can be placed here
+							this.gameBoard3x3[randomPlayerSquare].residentPlayer = true
+							
+							// set this.player position information based on current gameBoard spot
+							this.player.position.row = this.gameBoard3x3[randomPlayerSquare].row
+							this.player.position.col = this.gameBoard3x3[randomPlayerSquare].col
+							// console.log("THIS IS PLAYER POSITION", this.player.position)
+						} else
+						if(this.gameBoard3x3[i].residentPlayer === false) {
+							// PLACING THE COMPUTER CONTROLLED CHARACTERS
+							// PLACING THE COMPUTER CONTROLLED CHARACTERS
+							// PLACING THE COMPUTER CONTROLLED CHARACTERS
 
-						// GAME BOARD SETTINGS BEING SET
-						this.gameBoard3x3[randomSquare].residentPlayer = true
-						
-						// PLAYER SETTINGS BEING SET
-						this.player.position.row = this.gameBoard3x3[randomSquare].row
-						this.player.position.col = this.gameBoard3x3[randomSquare].col
-						this.playerPlaced = true
-						console.log("THIS IS PLAYER POSITION", this.player.position)
-					}
+							// find a random number between 1-3, this will correlate with the index position of the NPC type
+							let randomNpcType = Math.floor(Math.random() * 3);
+							console.log('Npc Choosen', randomNpcType)
 
-					// PLACING THE COMPUTER CONTROLLED CHARACTERS
-					if(this.playerPlaced === true){
-
-						// GAME BOARD SETTINGS BEING SET
-						// this.gameBoard3x3[randomSquare].residentNpc = true
-
-						// NPC SETTINGS BEING SET
-
-					}
-
+							this.gameBoard3x3[i].residentNpc = true
+							this.gameBoard3x3[i].npcType =  this.npcTypes[randomNpcType]
+						}
 
 					}, 1000)
 				}
-
-
-
 			},
 
 
@@ -355,6 +384,27 @@
 
 #control_Btn {
   box-shadow:3px 3px 5px;
+}
+
+.plainsbg {
+	height: 185px;
+	background: url('../assets/plains.png') no-repeat center center;
+	background-size: cover;
+}
+.forestbg {
+	height: 185px;
+	background: url('../assets/forest.png') no-repeat center center;
+	background-size: cover;
+}
+.mountainsbg {
+	height: 185px;
+	background: url('../assets/mountains.png') no-repeat center center;
+	background-size: cover;
+}
+.oceanbg {
+	height: 185px;
+	background: url('../assets/ocean.png') no-repeat center center;
+	background-size: cover;
 }
 
 </style>
