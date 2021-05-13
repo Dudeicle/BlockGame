@@ -90,8 +90,7 @@
 				</button>
 			</v-col>
 			</v-row> -->
-
-	</v-container>
+</v-container>
 </template>
 
 <script>
