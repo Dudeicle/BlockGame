@@ -18,7 +18,7 @@
                 <!-- ALL TERRAIN POSSIBILITIES -->
                 <div v-if="item.terrain === 'plains'" class="plainsbg">
                     <p style="color: white; padding: 5%">{{ item.terrain }}</p>
-                    <p v-if="item.residentPlayer">PLAYER Position</p>
+                    <p v-if="item.residentPlayer">PLAYER Positions</p>
                     <p v-if="item.residentNpc">{{ item.npcType.name }}</p>
                 </div>
 
